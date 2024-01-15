@@ -17,3 +17,9 @@ fisc:3
 croissance:2
 soldes:2
 commerce:3
+investir:3
+automobiles:3
+riches:3
+augmentation:3
+bénéfice:3
+groupe:1
