@@ -1,4 +1,4 @@
-cellules:2
+cellules:3
 tumeur:3
 cancer:3
 cancers:3
@@ -22,7 +22,7 @@ greffes:3
 organes:3
 progrès:1
 sécheresse:3
-eau:1
+eau:2
 ressources:1
 planète:3
 planètes:3
@@ -40,7 +40,8 @@ sanitaires:2
 vaccination:3
 manchots:3
 réchauffement:3
-espèce:2
+espèce:3
+espèces:3
 génome:3
 génétiques:3
 environnement:3
@@ -77,4 +78,17 @@ souris:3
 animal:2
 virus:3
 exoplanètes:3
-
+poumon:3
+chercheurs:3
+végétales:3
+animales:3
+malades:3
+recherche:3
+scientifiques:3
+séisme:3
+cheveux:3
+émissions:3
+ciel:3
+étude:2
+antidépresseurs:3
+animaux:3
