@@ -2,10 +2,10 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Classification {
-
 
     private static ArrayList<Depeche> lectureDepeches(String nomFichier) {
         //creation d'un tableau de dépêches
@@ -42,6 +42,52 @@ public class Classification {
 
 
     public static void classementDepeches(ArrayList<Depeche> depeches, ArrayList<Categorie> categories, String nomFichier) {
+        FileWriter file = null;
+        ArrayList<String> l = new ArrayList<>();
+        try {
+            file = new FileWriter(nomFichier);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        for(Depeche d : depeches){
+            String max = "sans categorie";
+            int cpt = 0;
+            for(Categorie cat : categories){
+                if(cpt < cat.score(d)){
+                    cpt = cat.score(d);
+                    max = cat.getNom();
+                }
+            }
+            l.add(max);
+            try{
+                file.append(d.getId()+":"+max+"\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        for(Categorie cat : categories){
+            int cpt = 0;
+            int pourcent = 0;
+            for(String s: l){
+                if(!depeches.get(cpt).getCategorie().equalsIgnoreCase(s)){
+                    pourcent++;
+                }
+                cpt++;
+            }
+            try{
+                file.append(cat.getNom()+" :"+pourcent+"\n");
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        try {
+            file.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -71,9 +117,24 @@ public class Classification {
         for (int i = 0; i < depeches.size(); i++) {
             depeches.get(i).afficher();
         }
+        Categorie cat1 = new Categorie("Environnement-Science", "./ENVIRONNEMENT-SCIENCE");
+        Categorie cat2 = new Categorie("Economie", "./ECONOMIE");
+        Categorie cat3 = new Categorie("Sport", "./SPORTS");
+        Categorie cat5 = new Categorie("Culture", "./CULTURE");
 
+
+
+
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("String?");
+//        String mot = sc.nextLine();
+//        System.out.println(UtilitairePaireChaineEntier.entierPourChaine(cat1.getLexique(), mot));
+//        System.out.println(cat1.score(depeches.get(10)));
+        ArrayList<Categorie> Categories = new ArrayList<>(Arrays.asList(cat1, cat2,cat3, cat5));
+//        for(Categorie cat : Categories){
+//            System.out.println(cat.getNom()+cat.score(depeches.get(10)));
+//        }
+//        System.out.println(depeches.get(10).getContenu());
+        classementDepeches(depeches, Categories, "oui.txt");
     }
-
-
 }
-
