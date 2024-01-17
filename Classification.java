@@ -1,9 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class Classification {
 
@@ -101,18 +99,27 @@ public class Classification {
 
 
     public static ArrayList<PaireChaineEntier> initDico(ArrayList<Depeche> depeches, String categorie) {
-        ArrayList<PaireChaineEntier> resultat = new ArrayList<>();
+
+        Set<String> mots = new HashSet<>();
+        ArrayList<PaireChaineEntier> dictionnaire = new ArrayList<>();
 
         for (Depeche d : depeches) {
             if(d.getCategorie().equals(categorie)){
-                for(String mot : d.getMots()){
-                    if(!resultat.contains(new PaireChaineEntier(mot, 0))){
-                        resultat.add(new PaireChaineEntier(mot, 0));
-                    }
+
+                mots.addAll(d.getMots());
+
                 }
             }
+
+        for (String mot : mots) {
+
+            dictionnaire.add(new PaireChaineEntier(mot, 0));
+
         }
-        return resultat;
+
+
+
+        return dictionnaire;
     }
 
     public static void calculScores(ArrayList<Depeche> depeches, String categorie, ArrayList<PaireChaineEntier> dictionnaire) {
@@ -142,9 +149,9 @@ public class Classification {
     public static int poidsPourScore(int score) {
         int poids = 0;
 
-        if(score > 0){poids = 1;}
-        if(score > 2){poids =  2;}
-        if(score > 5){poids =  3;}
+        if(score >= 0){poids = 1;}
+        if(score >= 1){poids =  2;}
+        if(score >= 2){poids =  3;}
 
         return poids;
     }
