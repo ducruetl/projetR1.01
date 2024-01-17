@@ -116,28 +116,37 @@ public class Classification {
     }
 
     public static void calculScores(ArrayList<Depeche> depeches, String categorie, ArrayList<PaireChaineEntier> dictionnaire) {
-         for(int i = 0; i < dictionnaire.size(); i++){
-             for (Depeche d : depeches) {
-                 for(String mot: d.getMots()){
-                     if(dictionnaire.get(i).getChaine().equals(mot) && d.getCategorie().equals(categorie)){
-                        dictionnaire.set(i,new PaireChaineEntier(dictionnaire.get(i).getChaine(),dictionnaire.get(i).getentier()+1));
-                     }
-                     else if(dictionnaire.get(i).getChaine().equals(mot)){
-                         dictionnaire.set(i,new PaireChaineEntier(dictionnaire.get(i).getChaine(),dictionnaire.get(i).getentier()-1));
-                     }
-                 }
-             }
-         }
+
+        for (Depeche d : depeches) {
+
+            for (int i = 0; i < dictionnaire.size(); i++) {
+
+                if (d.getMots().contains(dictionnaire.get(i).getChaine())) {
+
+                    for (String mot : d.getMots()) {
+                        if (dictionnaire.get(i).getChaine().equals(mot) && d.getCategorie().equals(categorie)) {
+                            dictionnaire.set(i, new PaireChaineEntier(dictionnaire.get(i).getChaine(), dictionnaire.get(i).getentier() + 1));
+                        } else if (dictionnaire.get(i).getChaine().equals(mot)) {
+                            dictionnaire.set(i, new PaireChaineEntier(dictionnaire.get(i).getChaine(), dictionnaire.get(i).getentier() - 1));
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
     public static int poidsPourScore(int score) {
-        int poid = 0;
+        int poids = 0;
 
-        if(score > 0){poid = 1;}
-        if(score > 2){poid =  2;}
-        if(score > 5){poid =  3;}
+        if(score > 0){poids = 1;}
+        if(score > 2){poids =  2;}
+        if(score > 5){poids =  3;}
 
-        return poid;
+        return poids;
     }
 
     public static void generationLexique(ArrayList<Depeche> depeches, String categorie, String nomFichier) {
@@ -173,23 +182,23 @@ public class Classification {
             depeches.get(i).afficher();
         }
 
-//        generationLexique(depeches, "ENVIRONNEMENT-SCIENCES", "ENVIRONNEMENT-SCIENCES_V2");
-//        generationLexique(depeches, "ECONOMIE", "ECONOMIE_V2");
-//        generationLexique(depeches, "SPORTS", "SPORTS_V2");
-//        generationLexique(depeches, "POLITIQUE", "POLITIQUE_V2");
-//        generationLexique(depeches, "CULTURE", "CULTURE_V2");
-//
-        Categorie cat1 = new Categorie("ENVIRONNEMENT-SCIENCES", "./ENVIRONNEMENT-SCIENCES");
-        Categorie cat2 = new Categorie("ECONOMIE", "./ECONOMIE");
-        Categorie cat3 = new Categorie("SPORTS", "./SPORTS");
-        Categorie cat4 = new Categorie("POLITIQUE", "./POLITIQUE");
-        Categorie cat5 = new Categorie("CULTURE", "./CULTURE");
-//
-//        Categorie cat1 = new Categorie("ENVIRONNEMENT-SCIENCES", "./ENVIRONNEMENT-SCIENCES_V2");
-//        Categorie cat2 = new Categorie("ECONOMIE", "./ECONOMIE_V2");
-//        Categorie cat3 = new Categorie("SPORTS", "./SPORTS_V2");
-//        Categorie cat4 = new Categorie("POLITIQUE", "./POLITIQUE_V2");
-//        Categorie cat5 = new Categorie("CULTURE", "./CULTURE_V2");
+        generationLexique(depeches, "ENVIRONNEMENT-SCIENCES", "ENVIRONNEMENT-SCIENCES_V2");
+        generationLexique(depeches, "ECONOMIE", "ECONOMIE_V2");
+        generationLexique(depeches, "SPORTS", "SPORTS_V2");
+        generationLexique(depeches, "POLITIQUE", "POLITIQUE_V2");
+        generationLexique(depeches, "CULTURE", "CULTURE_V2");
+
+//        Categorie cat1 = new Categorie("ENVIRONNEMENT-SCIENCES", "./ENVIRONNEMENT-SCIENCES");
+//        Categorie cat2 = new Categorie("ECONOMIE", "./ECONOMIE");
+//        Categorie cat3 = new Categorie("SPORTS", "./SPORTS");
+//        Categorie cat4 = new Categorie("POLITIQUE", "./POLITIQUE");
+//        Categorie cat5 = new Categorie("CULTURE", "./CULTURE");
+
+        Categorie cat1 = new Categorie("ENVIRONNEMENT-SCIENCES", "./ENVIRONNEMENT-SCIENCES_V2");
+        Categorie cat2 = new Categorie("ECONOMIE", "./ECONOMIE_V2");
+        Categorie cat3 = new Categorie("SPORTS", "./SPORTS_V2");
+        Categorie cat4 = new Categorie("POLITIQUE", "./POLITIQUE_V2");
+        Categorie cat5 = new Categorie("CULTURE", "./CULTURE_V2");
 
 
 
