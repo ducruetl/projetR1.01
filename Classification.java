@@ -86,7 +86,7 @@ public class Classification {
             }
         }
         try{
-            file.append("moyenne :"+moyenne/categories.size()+"%\n");
+            file.append("MOYENNE :"+moyenne/categories.size()+"%\n");
         }catch (IOException e){
             e.printStackTrace();
         }
