@@ -10,9 +10,4 @@ public class PaireChaineEntier {
 
     public String getChaine(){return chaine;}
     public int getentier(){return entier;}
-
-    @Override
-    public String toString(){
-        return chaine+"\n";
-    }
 }

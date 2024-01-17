@@ -116,10 +116,10 @@ public class Classification {
     }
 
     public static void calculScores(ArrayList<Depeche> depeches, String categorie, ArrayList<PaireChaineEntier> dictionnaire) {
-         for(int i=0;i < dictionnaire.size();i++){
+         for(int i = 0; i < dictionnaire.size(); i++){
              for (Depeche d : depeches) {
                  for(String mot: d.getMots()){
-                     if(dictionnaire.get(i).getChaine().equals(mot) & d.getCategorie().equals(categorie)){
+                     if(dictionnaire.get(i).getChaine().equals(mot) && d.getCategorie().equals(categorie)){
                         dictionnaire.set(i,new PaireChaineEntier(dictionnaire.get(i).getChaine(),dictionnaire.get(i).getentier()+1));
                      }
                      else if(dictionnaire.get(i).getChaine().equals(mot)){
@@ -143,19 +143,27 @@ public class Classification {
     public static void generationLexique(ArrayList<Depeche> depeches, String categorie, String nomFichier) {
         ArrayList<PaireChaineEntier> dico = initDico(depeches, categorie);
         calculScores(depeches, categorie, dico);
-        for(PaireChaineEntier pe : dico){
+
             try {
                 FileWriter file = new FileWriter(nomFichier);
-                file.write(pe.getChaine() + ":" + poidsPourScore(pe.getentier()) + "\n");
+
+                for(PaireChaineEntier pe : dico) {
+
+                    file.write(pe.getChaine() + ":" + poidsPourScore(pe.getentier()) + "\n");
+
+                }
+
                 file.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
 
     }
 
     public static void main(String[] args) {
+
+        long startTime = System.currentTimeMillis();
 
         //Chargement des dépêches en mémoire
         System.out.println("chargement des dépêches");
@@ -164,13 +172,24 @@ public class Classification {
         for (int i = 0; i < depeches.size(); i++) {
             depeches.get(i).afficher();
         }
-        Categorie cat1 = new Categorie("Environnement-Sciences", "./ENVIRONNEMENT-SCIENCE");
-        Categorie cat2 = new Categorie("Economie", "./ECONOMIE");
-        Categorie cat3 = new Categorie("Sports", "./SPORTS");
-        Categorie cat4 = new Categorie("Politique", "./POLITIQUE");
-        Categorie cat5 = new Categorie("Culture", "./CULTURE");
 
-
+//        generationLexique(depeches, "ENVIRONNEMENT-SCIENCES", "ENVIRONNEMENT-SCIENCES_V2");
+//        generationLexique(depeches, "ECONOMIE", "ECONOMIE_V2");
+//        generationLexique(depeches, "SPORTS", "SPORTS_V2");
+//        generationLexique(depeches, "POLITIQUE", "POLITIQUE_V2");
+//        generationLexique(depeches, "CULTURE", "CULTURE_V2");
+//
+        Categorie cat1 = new Categorie("ENVIRONNEMENT-SCIENCES", "./ENVIRONNEMENT-SCIENCES");
+        Categorie cat2 = new Categorie("ECONOMIE", "./ECONOMIE");
+        Categorie cat3 = new Categorie("SPORTS", "./SPORTS");
+        Categorie cat4 = new Categorie("POLITIQUE", "./POLITIQUE");
+        Categorie cat5 = new Categorie("CULTURE", "./CULTURE");
+//
+//        Categorie cat1 = new Categorie("ENVIRONNEMENT-SCIENCES", "./ENVIRONNEMENT-SCIENCES_V2");
+//        Categorie cat2 = new Categorie("ECONOMIE", "./ECONOMIE_V2");
+//        Categorie cat3 = new Categorie("SPORTS", "./SPORTS_V2");
+//        Categorie cat4 = new Categorie("POLITIQUE", "./POLITIQUE_V2");
+//        Categorie cat5 = new Categorie("CULTURE", "./CULTURE_V2");
 
 
 
@@ -185,5 +204,8 @@ public class Classification {
 //        }
 //        System.out.println(depeches.get(10).getContenu());
         classementDepeches(depeches, Categories, "oui.txt");
+
+        System.out.println("Temps d'exécution : " + (System.currentTimeMillis() - startTime));
+
     }
 }

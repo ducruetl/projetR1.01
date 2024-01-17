@@ -40,8 +40,8 @@ public class Categorie {
                 String ligne = scanner.nextLine();
                 int index = ligne.indexOf(":");
                 String mot = ligne.substring(0, index);
-                int poid = Integer.valueOf(ligne.substring(index+1));
-                PaireChaineEntier pair = new PaireChaineEntier(mot, poid);
+                int poids = Integer.parseInt(ligne.substring(index+1));
+                PaireChaineEntier pair = new PaireChaineEntier(mot, poids);
                 this.lexique.add(pair);
             }
         } catch (IOException e) {
