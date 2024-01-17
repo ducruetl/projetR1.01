@@ -50,6 +50,8 @@ public class Classification {
             throw new RuntimeException(e);
         }
 
+// Associe à chaque dépêche, un score par catégorie en fonction des mots du lexique pour déterminer la catégorie la plus probable
+
         for(Depeche d : depeches){
             String max = "sans categorie";
             int cpt = 0;
