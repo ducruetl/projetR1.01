@@ -42,8 +42,8 @@ public class Classification {
 
 
     public static void classementDepeches(ArrayList<Depeche> depeches, ArrayList<Categorie> categories, String nomFichier) {
-        FileWriter file = null;
-        ArrayList<String> l = new ArrayList<>();
+        FileWriter file;
+        ArrayList<String> listeDepeche = new ArrayList<>();
         try {
             file = new FileWriter(nomFichier);
         } catch (IOException e) {
@@ -59,27 +59,34 @@ public class Classification {
                     max = cat.getNom();
                 }
             }
-            l.add(max);
+            listeDepeche.add(max);
             try{
                 file.append(d.getId()+":"+max+"\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        float moyenne = 0;
         for(Categorie cat : categories){
             int cpt = 0;
             int pourcent = 0;
-            for(String s: l){
-                if(!depeches.get(cpt).getCategorie().equalsIgnoreCase(s)){
+            for(String s: listeDepeche){
+                if(s.equalsIgnoreCase(cat.getNom()) & s.equalsIgnoreCase(depeches.get(cpt).getCategorie())){
                     pourcent++;
                 }
                 cpt++;
             }
+            moyenne += pourcent;
             try{
-                file.append(cat.getNom()+" :"+pourcent+"\n");
+                file.append(cat.getNom()+" :"+pourcent+"%\n");
             }catch (IOException e){
                 e.printStackTrace();
             }
+        }
+        try{
+            file.append("moyenne :"+moyenne/categories.size()+"%\n");
+        }catch (IOException e){
+            e.printStackTrace();
         }
         try {
             file.close();
@@ -93,18 +100,56 @@ public class Classification {
 
     public static ArrayList<PaireChaineEntier> initDico(ArrayList<Depeche> depeches, String categorie) {
         ArrayList<PaireChaineEntier> resultat = new ArrayList<>();
-        return resultat;
 
+        for (Depeche d : depeches) {
+            if(d.getCategorie().equals(categorie)){
+                for(String mot : d.getMots()){
+                    if(!resultat.contains(new PaireChaineEntier(mot, 0))){
+                        resultat.add(new PaireChaineEntier(mot, 0));
+                    }
+                }
+            }
+        }
+        return resultat;
     }
 
     public static void calculScores(ArrayList<Depeche> depeches, String categorie, ArrayList<PaireChaineEntier> dictionnaire) {
+         for(int i=0;i < dictionnaire.size();i++){
+             for (Depeche d : depeches) {
+                 for(String mot: d.getMots()){
+                     if(dictionnaire.get(i).getChaine().equals(mot) & d.getCategorie().equals(categorie)){
+                        dictionnaire.set(i,new PaireChaineEntier(dictionnaire.get(i).getChaine(),dictionnaire.get(i).getentier()+1));
+                     }
+                     else if(dictionnaire.get(i).getChaine().equals(mot)){
+                         dictionnaire.set(i,new PaireChaineEntier(dictionnaire.get(i).getChaine(),dictionnaire.get(i).getentier()-1));
+                     }
+                 }
+             }
+         }
     }
 
     public static int poidsPourScore(int score) {
-        return 0;
+        int poid = 0;
+
+        if(score > 0){poid = 1;}
+        if(score > 2){poid =  2;}
+        if(score > 5){poid =  3;}
+
+        return poid;
     }
 
     public static void generationLexique(ArrayList<Depeche> depeches, String categorie, String nomFichier) {
+        ArrayList<PaireChaineEntier> dico = initDico(depeches, categorie);
+        calculScores(depeches, categorie, dico);
+        for(PaireChaineEntier pe : dico){
+            try {
+                FileWriter file = new FileWriter(nomFichier);
+                file.write(pe.getChaine() + ":" + poidsPourScore(pe.getentier()) + "\n");
+                file.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -117,10 +162,12 @@ public class Classification {
         for (int i = 0; i < depeches.size(); i++) {
             depeches.get(i).afficher();
         }
-        Categorie cat1 = new Categorie("Environnement-Science", "./ENVIRONNEMENT-SCIENCE");
+        Categorie cat1 = new Categorie("Environnement-Sciences", "./ENVIRONNEMENT-SCIENCE");
         Categorie cat2 = new Categorie("Economie", "./ECONOMIE");
-        Categorie cat3 = new Categorie("Sport", "./SPORTS");
+        Categorie cat3 = new Categorie("Sports", "./SPORTS");
+        Categorie cat4 = new Categorie("Politique", "./POLITIQUE");
         Categorie cat5 = new Categorie("Culture", "./CULTURE");
+
 
 
 
@@ -130,7 +177,7 @@ public class Classification {
 //        String mot = sc.nextLine();
 //        System.out.println(UtilitairePaireChaineEntier.entierPourChaine(cat1.getLexique(), mot));
 //        System.out.println(cat1.score(depeches.get(10)));
-        ArrayList<Categorie> Categories = new ArrayList<>(Arrays.asList(cat1, cat2,cat3, cat5));
+        ArrayList<Categorie> Categories = new ArrayList<>(Arrays.asList(cat1, cat2,cat3,cat4, cat5));
 //        for(Categorie cat : Categories){
 //            System.out.println(cat.getNom()+cat.score(depeches.get(10)));
 //        }
