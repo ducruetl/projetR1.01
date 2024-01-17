@@ -6,6 +6,9 @@ import java.util.*;
 public class Classification {
 
     private static ArrayList<Depeche> lectureDepeches(String nomFichier) {
+        // { nomFichier existant } => { Séparation et placement dans la liste depeches
+        // des différentes dépêches présentes dans le fichier nomFichier }
+
         //creation d'un tableau de dépêches
         ArrayList<Depeche> depeches = new ArrayList<>();
         try {
@@ -40,6 +43,11 @@ public class Classification {
 
 
     public static void classementDepeches(ArrayList<Depeche> depeches, ArrayList<Categorie> categories, String nomFichier) {
+        // { } =>
+        // { * Crée un fichier nomFichier contenant, pour chaque dépêche, la catégorie la plus probable en fonction
+        // du score attribué pour chaque catégorie.
+        //   * Affiche le pourcentage de précision pour chaque catégorie et la moyenne de ces pourcentages. }
+
         FileWriter file;
         ArrayList<String> listeDepeche = new ArrayList<>();
         try {
@@ -61,7 +69,7 @@ public class Classification {
             }
             listeDepeche.add(max);
             try{
-                file.append(d.getId()+":"+max+"\n");
+                file.append(d.getId() + ":" + max + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -78,13 +86,13 @@ public class Classification {
             }
             moyenne += pourcent;
             try{
-                file.append(cat.getNom()+" :"+pourcent+"%\n");
+                file.append(cat.getNom() + " :" + pourcent + "%\n");
             }catch (IOException e){
                 e.printStackTrace();
             }
         }
         try{
-            file.append("MOYENNE :"+moyenne/categories.size()+"%\n");
+            file.append("MOYENNE :" + (moyenne/categories.size()) + "%\n");
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -99,6 +107,8 @@ public class Classification {
 
 
     public static ArrayList<PaireChaineEntier> initDico(ArrayList<Depeche> depeches, String categorie) {
+        // { } => { Renvoie une liste de PaireChaineEntier contenant de manière unique tout les mots apparaissant au
+        // moins une fois dans les dépêches de la catégorie spécifiée }
 
         Set<String> mots = new HashSet<>();
         ArrayList<PaireChaineEntier> dictionnaire = new ArrayList<>();
@@ -123,6 +133,8 @@ public class Classification {
     }
 
     public static void calculScores(ArrayList<Depeche> depeches, String categorie, ArrayList<PaireChaineEntier> dictionnaire) {
+        // { } => { Attribue à chaque mot contenu dans la liste dictionnaire, un score calculé en fonction de son
+        // nombre d'apparitions dans les différentes catégories }
 
         for (Depeche d : depeches) {
 
@@ -147,16 +159,21 @@ public class Classification {
     }
 
     public static int poidsPourScore(int score) {
+        // { } => { Renvoie un poids en fonction de score reçu }
+
         int poids = 0;
 
-        if(score >= 0){poids = 1;}
-        if(score >= 1){poids =  2;}
-        if(score >= 2){poids =  3;}
+        if(score >= 2){poids = 3;}
+        else if(score >= 1){poids = 2;}
+        else if(score >= 0){poids = 1;}
 
         return poids;
     }
 
     public static void generationLexique(ArrayList<Depeche> depeches, String categorie, String nomFichier) {
+        // { } => { Génère un fichier nomFichier contenant le lexique (mot + poids) d'une catégorie donnée
+        // à partir des données de la liste depeches }
+
         ArrayList<PaireChaineEntier> dico = initDico(depeches, categorie);
         calculScores(depeches, categorie, dico);
 
@@ -184,10 +201,14 @@ public class Classification {
         //Chargement des dépêches en mémoire
         System.out.println("chargement des dépêches");
         ArrayList<Depeche> depeches = lectureDepeches("./depeches.txt");
+        ArrayList<Depeche> test = lectureDepeches("./test.txt");
 
         for (int i = 0; i < depeches.size(); i++) {
             depeches.get(i).afficher();
         }
+
+        // Génération automatique des lexiques et attribution des lexiques aux
+        // différentes catégories ( Partie 2 )
 
         generationLexique(depeches, "ENVIRONNEMENT-SCIENCES", "ENVIRONNEMENT-SCIENCES_V2");
         generationLexique(depeches, "ECONOMIE", "ECONOMIE_V2");
@@ -195,31 +216,36 @@ public class Classification {
         generationLexique(depeches, "POLITIQUE", "POLITIQUE_V2");
         generationLexique(depeches, "CULTURE", "CULTURE_V2");
 
-//        Categorie cat1 = new Categorie("ENVIRONNEMENT-SCIENCES", "./ENVIRONNEMENT-SCIENCES");
-//        Categorie cat2 = new Categorie("ECONOMIE", "./ECONOMIE");
-//        Categorie cat3 = new Categorie("SPORTS", "./SPORTS");
-//        Categorie cat4 = new Categorie("POLITIQUE", "./POLITIQUE");
-//        Categorie cat5 = new Categorie("CULTURE", "./CULTURE");
-
         Categorie cat1 = new Categorie("ENVIRONNEMENT-SCIENCES", "./ENVIRONNEMENT-SCIENCES_V2");
         Categorie cat2 = new Categorie("ECONOMIE", "./ECONOMIE_V2");
         Categorie cat3 = new Categorie("SPORTS", "./SPORTS_V2");
         Categorie cat4 = new Categorie("POLITIQUE", "./POLITIQUE_V2");
         Categorie cat5 = new Categorie("CULTURE", "./CULTURE_V2");
 
+        // Attribution des lexiques aux différentes catégories ( Partie 1 )
+        // Laisser commenté pour exécuter la partie 2
 
+//        Categorie cat1 = new Categorie("ENVIRONNEMENT-SCIENCES", "./ENVIRONNEMENT-SCIENCES");
+//        Categorie cat2 = new Categorie("ECONOMIE", "./ECONOMIE");
+//        Categorie cat3 = new Categorie("SPORTS", "./SPORTS");
+//        Categorie cat4 = new Categorie("POLITIQUE", "./POLITIQUE");
+//        Categorie cat5 = new Categorie("CULTURE", "./CULTURE");
 
 //        Scanner sc = new Scanner(System.in);
 //        System.out.println("String?");
 //        String mot = sc.nextLine();
 //        System.out.println(UtilitairePaireChaineEntier.entierPourChaine(cat1.getLexique(), mot));
 //        System.out.println(cat1.score(depeches.get(10)));
-        ArrayList<Categorie> Categories = new ArrayList<>(Arrays.asList(cat1, cat2,cat3,cat4, cat5));
+
 //        for(Categorie cat : Categories){
 //            System.out.println(cat.getNom()+cat.score(depeches.get(10)));
 //        }
 //        System.out.println(depeches.get(10).getContenu());
-        classementDepeches(depeches, Categories, "oui.txt");
+
+        ArrayList<Categorie> Categories = new ArrayList<>(Arrays.asList(cat1, cat2,cat3,cat4, cat5));
+
+        classementDepeches(depeches, Categories, "testDepeches.txt");
+        classementDepeches(test, Categories, "testTest.txt");
 
         System.out.println("Temps d'exécution : " + (System.currentTimeMillis() - startTime));
 
