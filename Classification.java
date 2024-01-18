@@ -234,6 +234,9 @@ public class Classification {
 //        Scanner sc = new Scanner(System.in);
 //        System.out.println("String?");
 //        String mot = sc.nextLine();
+        ArrayList<PaireChaineEntier> atri = cat1.getLexique();
+        UtilitairePaireChaineEntier.triRapide(atri);
+        System.out.println(atri);
 //        System.out.println(UtilitairePaireChaineEntier.entierPourChaine(cat1.getLexique(), mot));
 //        System.out.println(cat1.score(depeches.get(10)));
 
