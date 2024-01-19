@@ -44,6 +44,25 @@ public class UtilitairePaireChaineEntier {
         }
         return cpt;
     }
+    public static int indicePourChaineDicho(ArrayList<PaireChaineEntier> listePaires, String chaine) {
+        return iPCDichoWk(listePaires,0,listePaires.size()-1,chaine);
+    }
+    public static int iPCDichoWk(ArrayList<PaireChaineEntier> lst, int deb, int fin, String ch){
+        if (fin >= deb){
+            int mid = deb + (fin - deb)/2;
+            if (lst.get(mid).getChaine().equals(ch)){
+                return mid;
+            }
+            if (lst.get(mid).getChaine().compareTo(ch) > 0){
+                return iPCDichoWk(lst, deb, mid-1, ch);
+            }else{
+                return iPCDichoWk(lst, mid+1, fin, ch);
+            }
+        }
+        return -1;
+    }
+
+
 
     public static int entierPourChaine(ArrayList<PaireChaineEntier> listePaires, String chaine) {
         int x = 0;
@@ -54,6 +73,25 @@ public class UtilitairePaireChaineEntier {
         }
 
         return x;
+    }
+
+
+    public static int entierPourChaineDicho(ArrayList<PaireChaineEntier> listePaires, String chaine) {
+        return ePCDichowk(listePaires,0,listePaires.size()-1,chaine);
+    }
+    public static int ePCDichowk(ArrayList<PaireChaineEntier> lst, int deb, int fin, String ch){
+        if (fin >= deb){
+            int mid = deb + (fin - deb)/2;
+            if (lst.get(mid).getChaine().equals(ch)){
+                return lst.get(mid).getentier();
+            }
+            if (lst.get(mid).getChaine().compareTo(ch) > 0){
+                return iPCDichoWk(lst, deb, mid-1, ch);
+            }else{
+                return iPCDichoWk(lst, mid+1, fin, ch);
+            }
+        }
+        return -1;
     }
 
     public static String chaineMax(ArrayList<PaireChaineEntier> listePaires) {
@@ -89,5 +127,8 @@ public class UtilitairePaireChaineEntier {
 
         return x/listePaires.size();
     }
+
+    public static int compromis_trie(ArrayList<PaireChaineEntier> listePaires){return listePaires.get(listePaires.size()/2).getentier();}
+    // en admettant que c'est une liste trié, si on prend la valeur au milieu on pourrait conculre a une moyenne aproximative?
 
 }
